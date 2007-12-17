@@ -11,7 +11,6 @@ Group:		System/Libraries
 Url:		http://log4cpp.sourceforge.net/
 Source0:	%{name}-%{version}.tar.bz2
 Patch0:		log4cpp-0.3.4b-fix-underquoted-calls.patch.bz2
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	autoconf2.5 doxygen
 
 %description
