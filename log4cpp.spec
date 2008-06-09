@@ -65,8 +65,12 @@ mv $RPM_BUILD_ROOT/%_prefix/doc/* $RPM_BUILD_ROOT/%_prefix/share/doc/
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if %mdkversion < 200900
 %post -n %{lib_name} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{lib_name} -p /sbin/ldconfig
+%endif
 
 %files -n %{lib_name}
 %defattr(-,root,root,755)
