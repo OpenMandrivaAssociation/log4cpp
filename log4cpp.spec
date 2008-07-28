@@ -3,7 +3,7 @@
 
 Name:		log4cpp
 Version:	0.3.4b
-Release:	%mkrel 4
+Release:	%mkrel 6
 
 Summary:	Log for C++
 License:	LGPL
