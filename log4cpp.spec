@@ -5,7 +5,7 @@
 Summary:	Log for C++
 Name:		log4cpp
 Version:	1.0
-Release:	%mkrel 0
+Release:	%mkrel 1
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		http://log4cpp.sourceforge.net/
