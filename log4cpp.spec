@@ -5,7 +5,7 @@
 Summary:	Log for C++
 Name:		log4cpp
 Version:	1.0
-Release:	%mkrel 1
+Release:	2
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		http://log4cpp.sourceforge.net/
@@ -18,7 +18,6 @@ BuildRequires:	autoconf2.5
 BuildRequires:  doxygen
 BuildRequires:  libtool
 BuildRequires:	multiarch-utils >= 1.0.3
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Log for C++ is a library of classes for flexible logging to files, syslog,
@@ -42,7 +41,6 @@ Group:		Development/C++
 Requires:	%{libname} >= %{version}
 Provides:	liblog4cpp-devel = %{version}-%{release}
 Provides:	log4cpp-devel = %{version}-%{release}
-Obsoletes:	%{mklibname log4cpp 3 -d}
 
 %description -n	%{develname}
 Log for C++ is a library of classes for flexible logging to files, syslog,
@@ -61,7 +59,6 @@ The %{name}-doc package contains HTML formatted API documention generated
 by the popular doxygen documentation generation tool.
 
 %prep
-
 %setup -q
 %patch0 -p1 -b .gcc43
 %patch1 -p1 -b .no-cflags
@@ -84,32 +81,19 @@ export LIBS="-lpthread"
 make check
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std
 
 %multiarch_binaries %{buildroot}%{_bindir}/log4cpp-config
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files -n %{libname}
 %defattr(-,root,root,0755)
 %attr(0755,root,root) %{_libdir}/lib*.so.%{major}*
-%doc AUTHORS COPYING INSTALL NEWS README THANKS ChangeLog
 
 %files -n %{develname}
 %defattr(-,root,root,0755)
 %{_includedir}/*
 %multiarch %{multiarch_bindir}/log4cpp-config
+
 %attr(0755,root,root) %{_bindir}/log4cpp-config
 %attr(0755,root,root) %{_libdir}/lib*.so
 %attr(0644,root,root) %{_libdir}/*.*a
@@ -120,3 +104,48 @@ rm -rf %{buildroot}
 %files doc
 %defattr(-,root,root,0755)
 %doc %{_docdir}/*
+
+%changelog
+* Fri Dec 10 2010 Oden Eriksson <oeriksson@mandriva.com> 1.0-1mdv2011.0
++ Revision: 620250
+- the mass rebuild of 2010.0 packages
+
+* Fri Oct 23 2009 Oden Eriksson <oeriksson@mandriva.com> 1.0-0mdv2010.0
++ Revision: 459069
+- 1.0
+- sync with log4cpp-1.0-4.fc12.src.rpm
+- added packaging fixes according to the mdv policy
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - rebuild
+    - rebuild
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+
+* Thu Jan 03 2008 Olivier Blin <oblin@mandriva.com> 0.3.4b-4mdv2008.1
++ Revision: 140932
+- restore BuildRoot
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+
+* Sun May 27 2007 Pascal Terjan <pterjan@mandriva.org> 0.3.4b-4mdv2008.0
++ Revision: 31645
+- rebuild
+- Import log4cpp
+
+
+
+* Tue Jan 31 2006 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.3.4b-3mdk
+- fix underquoted calls (P1)
+- %%mkrel
+- move %%configure to %%build
+- don't wipe out buildroot in %%prep
+- cosmetics
+
+* Fri Jun 04 2004 Pascal Terjan <pterjan@mandrake.org> 0.3.4b-2mdk
+- Rebuild
+
+* Sun Oct 19 2003 Pascal Terjan <CMoi@tuxfamily.org> 0.3.4b-1mdk
+- Mandrake adaptations
