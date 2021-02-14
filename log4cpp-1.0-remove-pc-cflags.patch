@@ -18,3 +18,4 @@
  m4_pushdef([PKGCONFIG_UP], [m4_translit([$1], [a-z], [A-Z])])dnl
  PKGCONFIG_UP[]_PKGCONFIG="PKGCONFIG_DIR[]$1-config"
  AC_SUBST(PKGCONFIG_UP[]_PKGCONFIG)
+

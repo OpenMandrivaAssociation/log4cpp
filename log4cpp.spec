@@ -1,151 +1,98 @@
-%define major 4
-%define libname %mklibname log4cpp %{major}
-%define develname %mklibname log4cpp -d
+%define major 5
+%define libname %mklibname %name %major
+%define develname %mklibname -d %name
 
-Summary:	Log for C++
-Name:		log4cpp
-Version:	1.0
-Release:	3
-License:	LGPLv2+
-Group:		System/Libraries
-URL:		http://log4cpp.sourceforge.net/
-Source0:	%{name}-%{version}.tar.gz
-Patch0:		log4cpp-1.0-gcc43.patch
-Patch1:		log4cpp-1.0-remove-pc-cflags.patch
-Patch2:		log4cpp-1.0-fix-doc-dest.patch
-Patch3:		log4cpp-1.0-no-snprintf.patch
-BuildRequires:	autoconf2.5
-BuildRequires:  doxygen
-BuildRequires:  libtool
-BuildRequires:	multiarch-utils >= 1.0.3
+Name:          log4cpp
+Version:       1.1.3
+Release:       %mkrel 3
+Summary:       C++ logging library
+Group:         Development/C++
+License:       LGPL
+Url:           http://sourceforge.net/projects/log4cpp/
+Source0:       https://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/%{name}-%{version}.tar.gz
+# Fix errors when compiling with gcc >= 4.3
+Patch0:        log4cpp-1.0-gcc43.patch
+# Don't put build cflags in .pc
+Patch1:        log4cpp-1.0-remove-pc-cflags.patch
+# Install docs into DESTDIR
+Patch2:        log4cpp-1.0-fix-doc-dest.patch
+# Don't try to build snprintf.c
+Patch3:        log4cpp-1.0-no-snprintf.patch
+Patch4:        log4cpp-1.0-automake-1.13.patch
+Patch5:	       log4cpp-1.0-pthread.patch
+
+BuildRequires: doxygen
 
 %description
 Log for C++ is a library of classes for flexible logging to files, syslog,
 and other destinations. It is modeled after the Log for Java library and
 stays as close to its API as is reasonable.
 
-%package -n	%{libname}
-Summary:	Log for C++ library
+%package -n %{libname}
 Group:		System/Libraries
+Summary:	Shared libraries for %{name}
+Obsoletes:	%{name} < 1.0-2
 
-%description -n	%{libname}
+%description -n %{libname}
 Log for C++ is a library of classes for flexible logging to files, syslog,
 and other destinations. It is modeled after the Log for Java library and
 stays as close to its API as is reasonable.
 
-This package contains the shared library needed to run programs using log4cpp.
+%package -n %{develname}
+Group:         Development/C++
+Summary:       The %{name} development libraries and headers
+Requires:      %{libname} = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
+Obsoletes:	%{name}-devel < 1.0-2
 
-%package -n	%{develname}
-Summary:	Development tools for Log for C++
-Group:		Development/C++
-Requires:	%{libname} >= %{version}
-Provides:	liblog4cpp-devel = %{version}-%{release}
-Provides:	log4cpp-devel = %{version}-%{release}
+%description -n %{develname}
+%{name} - Log library for C++.
 
-%description -n	%{develname}
-Log for C++ is a library of classes for flexible logging to files, syslog,
-and other destinations. It is modeled after the Log for Java library and
-stays as close to its API as is reasonable.
+This package contains development libraries and headers for %{name}.
 
-This package contains the static libraries and header files needed for
-development with %{libname}.
+%package doc
+Group:         Documentation
+Summary:       HTML formatted API documention for Log for C++
+BuildArch:	noarch
 
-%package	doc
-Summary:	HTML formatted API documention for Log for C++
-Group:		Development/C++
+%description doc
+%{name} - Log library for C++.
 
-%description	doc
-The %{name}-doc package contains HTML formatted API documention generated
-by the popular doxygen documentation generation tool.
+This package contains the development documentation for %{name}.
 
 %prep
-%setup -q
-%patch0 -p1 -b .gcc43
-%patch1 -p1 -b .no-cflags
-%patch2 -p1 -b .doc-dest
-%patch3 -p1 -b .no-snprintf
-
+%setup -q -n %{name}
+%autopatch -p1
 # Delete non-free (but freely distributable) file under Artistic 1.0
 # just to be sure we're not using it.
 rm -rf src/snprintf.c
+#Convert line endings.
+iconv -f iso8859-1 -t utf-8 ChangeLog > ChangeLog.conv && mv -f ChangeLog.conv ChangeLog
 
 %build
-libtoolize --copy --force; aclocal -I m4; autoconf; autoheader; automake --add-missing --copy
-export LIBS="-lpthread"
-
-%configure2_5x \
-    --enable-doxygen
-%make
-
-%check
-make check
+export PTHREAD_LIBS=-lpthread
+autoreconf -fi -Im4
+%configure --disable-static
+%make_build
 
 %install
-%makeinstall_std
+%make_install
+mv %{buildroot}%{_docdir}/log4cpp-* rpmdocs
 
-%multiarch_binaries %{buildroot}%{_bindir}/log4cpp-config
+find %{buildroot} -name '*.la' -delete
 
 %files -n %{libname}
-%defattr(-,root,root,0755)
-%attr(0755,root,root) %{_libdir}/lib*.so.%{major}*
+%{_libdir}/liblog4cpp.so.%{major}
+%{_libdir}/liblog4cpp.so.%{major}.*
+%doc ChangeLog COPYING
 
 %files -n %{develname}
-%defattr(-,root,root,0755)
-%{_includedir}/*
-%multiarch %{multiarch_bindir}/log4cpp-config
-
-%attr(0755,root,root) %{_bindir}/log4cpp-config
-%attr(0755,root,root) %{_libdir}/lib*.so
-%attr(0644,root,root) %{_libdir}/*.*a
-%attr(0644,root,root) %{_libdir}/pkgconfig/log4cpp.pc
+%{_bindir}/log4cpp-config
+%{_includedir}/log4cpp
+%{_libdir}/liblog4cpp.so
+%{_libdir}/pkgconfig/log4cpp.pc
 %{_datadir}/aclocal/log4cpp.m4
-%{_mandir}/*/*
+%{_mandir}/man3/log4cpp*
 
 %files doc
-%defattr(-,root,root,0755)
-%doc %{_docdir}/*
-
-%changelog
-* Fri Dec 10 2010 Oden Eriksson <oeriksson@mandriva.com> 1.0-1mdv2011.0
-+ Revision: 620250
-- the mass rebuild of 2010.0 packages
-
-* Fri Oct 23 2009 Oden Eriksson <oeriksson@mandriva.com> 1.0-0mdv2010.0
-+ Revision: 459069
-- 1.0
-- sync with log4cpp-1.0-4.fc12.src.rpm
-- added packaging fixes according to the mdv policy
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - rebuild
-    - rebuild
-
-  + Pixel <pixel@mandriva.com>
-    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
-
-* Thu Jan 03 2008 Olivier Blin <oblin@mandriva.com> 0.3.4b-4mdv2008.1
-+ Revision: 140932
-- restore BuildRoot
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - kill re-definition of %%buildroot on Pixel's request
-
-* Sun May 27 2007 Pascal Terjan <pterjan@mandriva.org> 0.3.4b-4mdv2008.0
-+ Revision: 31645
-- rebuild
-- Import log4cpp
-
-
-
-* Tue Jan 31 2006 Per Øyvind Karlsen <pkarlsen@mandriva.com> 0.3.4b-3mdk
-- fix underquoted calls (P1)
-- %%mkrel
-- move %%configure to %%build
-- don't wipe out buildroot in %%prep
-- cosmetics
-
-* Fri Jun 04 2004 Pascal Terjan <pterjan@mandrake.org> 0.3.4b-2mdk
-- Rebuild
-
-* Sun Oct 19 2003 Pascal Terjan <CMoi@tuxfamily.org> 0.3.4b-1mdk
-- Mandrake adaptations
+%doc rpmdocs/*

@@ -1,0 +1,11 @@
+--- log4cpp-1.0/configure.in~	2007-08-29 17:32:16.000000000 +0800
++++ log4cpp-1.0/configure.in	2013-01-12 23:59:41.209538922 +0800
+@@ -17,7 +17,7 @@
+ 
+ #AC_CONFIG_SRCDIR(configure.in)
+ AC_CONFIG_AUX_DIR(config)
+-AM_CONFIG_HEADER(include/config.h)
++AC_CONFIG_HEADERS(include/config.h)
+ 
+ AM_INIT_AUTOMAKE
+ 

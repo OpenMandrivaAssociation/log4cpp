@@ -1,0 +1,10 @@
+Index: log4cpp/src/Makefile.am
+===================================================================
+--- log4cpp/src/Makefile.am
++++ log4cpp/src/Makefile.am	2018-04-04 12:27:08.382235866 +0200
+@@ -65,3 +65,5 @@
+ endif
+ 
+ liblog4cpp_la_LDFLAGS = -version-info @LT_VERSION@
++liblog4cpp_la_CFLAGS = @PTHREAD_CFLAGS@
++liblog4cpp_la_LIBS = @PTHREAD_LIBS@
