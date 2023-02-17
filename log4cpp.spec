@@ -3,7 +3,7 @@
 %define develname %mklibname -d %name
 
 Name:          log4cpp
-Version:       1.1.3
+Version:       1.1.4rc2
 Release:       %mkrel 3
 Summary:       C++ logging library
 Group:         Development/C++
