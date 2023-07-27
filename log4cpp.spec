@@ -22,6 +22,7 @@ Patch4:        log4cpp-1.0-automake-1.13.patch
 Patch5:	       log4cpp-1.0-pthread.patch
 
 BuildRequires: doxygen
+BuildRequires: locales-extra-charsets
 
 %description
 Log for C++ is a library of classes for flexible logging to files, syslog,
