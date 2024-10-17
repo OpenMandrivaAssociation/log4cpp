@@ -8,7 +8,7 @@ Release:       1
 Summary:       C++ logging library
 Group:         Development/C++
 License:       LGPL
-Url:           http://sourceforge.net/projects/log4cpp/
+Url:           https://sourceforge.net/projects/log4cpp/
 Source0:       https://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/%{name}-%{version}.tar.gz
 # Fix errors when compiling with gcc >= 4.3
 Patch0:        log4cpp-1.0-gcc43.patch
