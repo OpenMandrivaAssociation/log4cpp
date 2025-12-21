@@ -21,6 +21,11 @@ Patch3:        log4cpp-1.0-no-snprintf.patch
 Patch4:        log4cpp-1.0-automake-1.13.patch
 Patch5:	       log4cpp-1.0-pthread.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires: doxygen
 BuildRequires: locales-extra-charsets
 
