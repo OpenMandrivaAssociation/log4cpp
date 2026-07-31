@@ -3,7 +3,7 @@
 %define develname %mklibname -d %name
 
 Name:          log4cpp
-Version:       1.1.5rc1
+Version:       1.1.6
 Release:       1
 Summary:       C++ logging library
 Group:         Development/C++
@@ -11,14 +11,14 @@ License:       LGPL
 Url:           https://sourceforge.net/projects/log4cpp/
 Source0:       https://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/%{name}-%{version}.tar.gz
 # Fix errors when compiling with gcc >= 4.3
-Patch0:        log4cpp-1.0-gcc43.patch
+# dropped (no longer applies): Patch0:        log4cpp-1.0-gcc43.patch
 # Don't put build cflags in .pc
-Patch1:        log4cpp-1.0-remove-pc-cflags.patch
+# dropped (no longer applies): Patch1:        log4cpp-1.0-remove-pc-cflags.patch
 # Install docs into DESTDIR
-Patch2:        log4cpp-1.0-fix-doc-dest.patch
+# dropped (no longer applies): Patch2:        log4cpp-1.0-fix-doc-dest.patch
 # Don't try to build snprintf.c
-Patch3:        log4cpp-1.0-no-snprintf.patch
-Patch4:        log4cpp-1.0-automake-1.13.patch
+# dropped (no longer applies): Patch3:        log4cpp-1.0-no-snprintf.patch
+# dropped (no longer applies): Patch4:        log4cpp-1.0-automake-1.13.patch
 Patch5:	       log4cpp-1.0-pthread.patch
 
 BuildRequires:	autoconf
@@ -67,7 +67,7 @@ BuildArch:	noarch
 This package contains the development documentation for %{name}.
 
 %prep
-%setup -q -n %{name}
+%setup -q -n log4cpp
 %autopatch -p1
 # Delete non-free (but freely distributable) file under Artistic 1.0
 # just to be sure we're not using it.
